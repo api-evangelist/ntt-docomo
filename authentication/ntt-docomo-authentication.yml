@@ -1,0 +1,149 @@
+generated: '2026-07-25'
+method: searched
+source: >-
+  https://conf.uw.docomo.ne.jp/.well-known/openid-configuration (HTTP 200,
+  fetched 2026-07-25, saved verbatim at
+  well-known/ntt-docomo-openid-configuration.json);
+  https://id.smt.docomo.ne.jp/src/index_business.html;
+  https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html
+docs: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html
+description: >-
+  NTT DOCOMO, Inc. publishes no REST API and therefore no OpenAPI
+  securitySchemes. Its one anonymously discoverable authentication surface is
+  d ACCOUNT Connect (dアカウント・コネクト), an OpenID Connect Provider fronting
+  roughly 90 million d ACCOUNT registrations across approximately 2,000
+  implemented relying-party sites. This profile is read from the live OIDC
+  discovery document plus DOCOMO's own business documentation — the integration
+  manual and support libraries are downloadable only after an application and
+  a DOCOMO review (審査), so the client-authentication methods, grant types and
+  claim set are not publicly readable.
+summary:
+  types: [openIdConnect]
+  api_key_in: []
+  oauth2_flows: [authorizationCode]
+  self_serve_credentials: false
+  gate: application + DOCOMO review (審査), ~3 business days per stage
+schemes:
+  - name: d ACCOUNT Connect
+    type: openIdConnect
+    openIdConnectUrl: https://conf.uw.docomo.ne.jp/.well-known/openid-configuration
+    issuer: https://conf.uw.docomo.ne.jp/
+    sources:
+      - well-known/ntt-docomo-openid-configuration.json
+    endpoints:
+      authorization_endpoint: https://id.smt.docomo.ne.jp/cgi8/oidc/authorize
+      token_endpoint: https://conf.uw.docomo.ne.jp/token
+      userinfo_endpoint: https://conf.uw.docomo.ne.jp/userinfo
+      jwks_uri: https://fr-end.oidc.if.cilite.docomo.ne.jp/oft/external/ofrnt/v1.0/jwksget
+      registration_endpoint: null
+      backchannel_authentication_endpoint: null
+      end_session_endpoint: null
+      revocation_endpoint: null
+      introspection_endpoint: null
+    response_types_supported: [code]
+    subject_types_supported: [pairwise]
+    id_token_signing_alg_values_supported: [HS256, RS256]
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://id.smt.docomo.ne.jp/cgi8/oidc/authorize
+        tokenUrl: https://conf.uw.docomo.ne.jp/token
+        note: >-
+          response_types_supported is ["code"] only — implicit and hybrid are
+          not advertised. No PKCE metadata
+          (code_challenge_methods_supported) is published.
+    jwks:
+      file: well-known/ntt-docomo-jwks.json
+      keys: 1
+      kty: RSA
+      use: sig
+      kid: null
+      note: The single published key carries no kid and no alg member.
+undeclared_in_metadata:
+  - scopes_supported
+  - grant_types_supported
+  - token_endpoint_auth_methods_supported
+  - claims_supported
+  - code_challenge_methods_supported
+  - request_object_signing_alg_values_supported
+  - userinfo_signing_alg_values_supported
+note_on_undeclared: >-
+  The discovery document is minimal (541 bytes, Last-Modified 2023-08-17). None
+  of the above OIDC Discovery 1.0 optional members are present, so the scope
+  catalogue, client-authentication methods and claim set cannot be derived from
+  public metadata. They are documented only in the gated integration manual.
+  For this reason no scopes/ artifact is emitted — an OAuthScopes file here
+  would be empty or invented.
+ciba:
+  supported: false
+  evidence: >-
+    No backchannel_authentication_endpoint and no
+    urn:openid:params:grant-type:ciba in the discovery document. CAMARA
+    specifies OIDC + CIBA for network-based authorization; DOCOMO advertises
+    neither.
+identity_assurance:
+  line_authentication: >-
+    DOCOMO documents network line authentication (ネットワーク暗証番号 / 回線認証) and
+    device biometrics behind d ACCOUNT, but these are authentication factors
+    inside the OP, not options a relying party selects through published
+    metadata.
+onboarding:
+  self_serve: false
+  steps:
+    - step: 1
+      action: Create a d ACCOUNT (business applicant identity)
+      url: https://id.smt.docomo.ne.jp/cgi8/id/register
+    - step: 2
+      action: >-
+        Register company and applicant information on the d ACCOUNT Connect
+        application site; DOCOMO reviews and replies by email (~3 business days)
+      url: https://g.daccount.docomo.ne.jp/VIEW_OC01/login4
+    - step: 3
+      action: >-
+        Download the integration manual, technical specification and support
+        libraries (available only after approval)
+    - step: 4
+      action: >-
+        Register service and relying-party site configuration; connection is
+        enabled after approval (~3 business days)
+    - step: 5
+      action: Implement d ACCOUNT Connect in the relying-party service
+    - step: 6
+      action: Go live
+  tiers:
+    - tier: Login only (ログイン機能のみ)
+      attributes_released: [user identifier]
+      conditions: none
+      fees: No registration fee, no annual fee
+      review: Application required
+    - tier: Login + user information (ログイン機能 + ユーザー情報)
+      attributes_released: [user identifier, email address, customer information]
+      conditions: Third-party certification (第三者認証の取得) required
+      fees: >-
+        Email address is provided free. Other attributes (name, date of birth,
+        etc.) are provided for a fee. Registration/annual fee applies, waived
+        for d POINT / d払い member merchants.
+      review: DOCOMO review (審査) required; contact DOCOMO
+  contact: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method_form.html
+other_transports:
+  - name: docomo Mail IMAP interface
+    auth: >-
+      IMAP over TLS with docomo Mail credentials, specified in the public
+      96-page Japanese PDF (mail_imap_spec_260126.pdf). Not an HTTP API and no
+      token issuance.
+    docs: https://www.docomo.ne.jp/service/developer/smart_phone/application/imap/
+absent:
+  api_keys: >-
+    No self-serve API key issuance exists on any NTT DOCOMO, Inc. host. The
+    first-party "docomo Developer support" programme that issued keys closed
+    31 March 2021 and its host no longer resolves.
+  mutual_tls: Not advertised.
+  camara_credentials: >-
+    No CAMARA / GSMA Open Gateway client-credential path is published by
+    DOCOMO. Its announced route (Aduna, partnership concluded 29 January 2026)
+    would issue credentials on the aggregator side, and DOCOMO was not yet
+    listed on Aduna's operator wall as of 2026-07-25.
+cross_reference:
+  well_known: well-known/ntt-docomo-well-known.yml
+  conformance: conformance/ntt-docomo-conformance.yml
+  conventions: conventions/ntt-docomo-conventions.yml
+  domain_security: security/ntt-docomo-domain-security.yml

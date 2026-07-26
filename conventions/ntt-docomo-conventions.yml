@@ -1,0 +1,187 @@
+generated: '2026-07-25'
+method: searched
+source: >-
+  well-known/ntt-docomo-openid-configuration.json (live, HTTP 200, fetched
+  2026-07-25); https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html;
+  https://id.smt.docomo.ne.jp/src/index_business.html;
+  https://www.docomo.ne.jp/service/developer/smart_phone/application/imap/
+description: >-
+  Cross-cutting runtime semantics for NTT DOCOMO, Inc.'s public interfaces.
+  There is no REST API here, so most of the conventions this artifact usually
+  captures — idempotency, pagination, expansion, metadata, request tracing, an
+  error envelope, rate-limit signalling — genuinely do not exist rather than
+  being undocumented. What does exist is a federated-identity protocol contract
+  (OpenID Connect authorization code) and a mail protocol contract (IMAP). Both
+  are recorded here so an agent knows exactly what shape of interaction is
+  possible and where the boundary sits.
+api_style: >-
+  No REST/HTTP API surface. Two protocol interfaces: OpenID Connect
+  (browser-redirect authorization code flow) and IMAP over TLS.
+surfaces:
+- name: d ACCOUNT Connect
+  protocol: OpenID Connect over HTTPS
+  issuer: https://conf.uw.docomo.ne.jp/
+  interaction: >-
+    Browser redirect to the authorization endpoint, code exchange at the token
+    endpoint, claim retrieval at the userinfo endpoint. There is no
+    programmatic resource API behind it — the relying party receives identity
+    assertions, not data endpoints.
+  detail: authentication/ntt-docomo-authentication.yml
+- name: docomo Mail IMAP interface
+  protocol: IMAP over TLS (IMAPS)
+  interaction: >-
+    Standard IMAP client session against the docomo Mail server. Specified in
+    ドコモメール IMAP インターフェース仕様書 第4.5版, 2026-01-26 — a 96-page Japanese
+    PDF (mail_imap_spec_260126.pdf, 1,229,737 bytes) published openly with no
+    registration. This is the one complete, unredacted machine-interface
+    contract NTT DOCOMO, Inc. publishes.
+  docs: https://www.docomo.ne.jp/service/developer/smart_phone/application/imap/
+  spec_pdf: https://www.docomo.ne.jp/binary/pdf/service/developer/smart_phone/application/imap/mail_imap_spec_260126.pdf
+  spec_version: '4.5'
+  spec_date: '2026-01-26'
+  spec_first_edition: '2013-12-19'
+  endpoints:
+  - host: imap.spmode.ne.jp
+    port: 993
+    note: General endpoint — used by all clients other than the iOS standard mailer.
+  - host: imap2.spmode.ne.jp
+    port: 993
+    note: >-
+      Used when configuring the standard iPhone/iPad mailer. Behaviour differs
+      from imap.spmode.ne.jp: this endpoint rewrites multipart structure so
+      Deco-mail pictures are not treated as attachments, and transcodes i-mode
+      pictographs to Unicode emoji in display names, subject, body and
+      attachment filenames (returned message size reflects the transcoded size,
+      except in GETQUOTAROOT/GETQUOTA).
+  credentials: d ACCOUNT ID and password
+  transport_security:
+    tls_version: TLS 1.2
+    server_authentication: certificate-based
+    public_key_length: 2048-bit
+    cipher_suites:
+    - RSA_WITH_AES_128_CBC_SHA
+    - RSA_WITH_AES_256_CBC_SHA
+    - RSA_WITH_3DES_EDE_CBC_SHA
+    - RSA_WITH_AES_128_CBC_SHA256
+    - RSA_WITH_AES_256_CBC_SHA256
+    - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+    - TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+    - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+    - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+    - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+    note: Cipher suites other than those listed are not accepted.
+  commands_specified:
+  - LOGIN
+  - AUTHENTICATE
+  - LOGOUT
+  - SELECT
+  - EXAMINE
+  - CREATE
+  - DELETE
+  - RENAME
+  - SUBSCRIBE
+  - UNSUBSCRIBE
+  - LIST
+  - LSUB
+  - STATUS
+  - CHECK
+  - CLOSE
+  - APPEND
+  - EXPUNGE
+  - SEARCH
+  - FETCH
+  - STORE
+  - COPY
+  - UID
+  - UID EXPUNGE
+  - CAPABILITY
+  - NOOP
+  - IDLE
+  - NAMESPACE
+  - GETQUOTAROOT
+  - GETQUOTA
+  - SETQUOTA
+  - ID
+  unsupported_command_behaviour: >-
+    Section 3.1.11 specifies the server response returned to a client that
+    issues an out-of-scope or unsupported command — the closest thing DOCOMO
+    publishes to a documented error contract on any interface.
+authentication:
+  scheme: OpenID Connect authorization code (response_type=code)
+  subject_identifier: pairwise — each relying party receives a different sub for the same user
+  id_token_signing: HS256 or RS256
+  client_credentials: >-
+    Issued only after DOCOMO's application and review process; no self-serve
+    key issuance exists anywhere on docomo.ne.jp.
+  detail: authentication/ntt-docomo-authentication.yml
+idempotency:
+  supported: false
+  mechanism: null
+  notes: >-
+    No idempotency-key header, parameter or contract is documented. There is no
+    write API to make idempotent — the OIDC surface is authorization-code
+    exchange only. No `Idempotency` pointer is emitted.
+pagination:
+  supported: false
+  notes: No collection endpoints are published, so no pagination contract exists.
+field_expansion:
+  supported: false
+  notes: >-
+    Attribute release is tiered commercially rather than by request parameter:
+    the login-only tier returns a user identifier; the login-plus-user-information
+    tier adds email address (free) and name, date of birth and other customer
+    information (paid). Selection happens at contract time, not at request time.
+metadata:
+  supported: false
+request_tracing:
+  request_id_header: null
+  notes: >-
+    No documented correlation header. The OIDC issuer host does return an
+    apigw-requestid and CloudFront x-amz-cf-id on responses (it sits behind AWS
+    API Gateway and CloudFront), but DOCOMO does not document either as a
+    support-traceable identifier.
+versioning:
+  scheme: none-published
+  notes: >-
+    No version segment in the OIDC endpoint paths and no version member in the
+    discovery document.
+  detail: lifecycle/ntt-docomo-lifecycle.yml
+error_envelope:
+  media_type: null
+  rfc9457: false
+  notes: >-
+    No error catalogue is published. OIDC/OAuth 2.0 protocol errors would be
+    the RFC 6749 error/error_description query parameters by specification, but
+    DOCOMO documents no error list of its own, so no errors/ artifact is
+    emitted rather than reproducing the RFC as if it were DOCOMO's contract.
+rate_limits:
+  documented: false
+  signal_status: null
+  notes: No rate-limit policy, headers or 429 contract are published.
+webhooks:
+  supported: false
+  notes: >-
+    No event, callback or webhook surface. Back-channel logout is not
+    advertised (no end_session or backchannel_logout metadata).
+sandbox:
+  available: false
+  notes: >-
+    No sandbox, test tenant or magic test identifier is published. Integration
+    testing happens against production after DOCOMO approves the relying-party
+    registration.
+gating:
+  self_serve: false
+  review_required: true
+  review_turnaround: ~3 business days per approval stage
+  notes: >-
+    The dominant convention of this provider is the gate itself. Two separate
+    reviews sit between a developer and a working integration — one on company
+    and applicant registration, one on service and relying-party configuration
+    — and the technical manual is only released between them.
+  detail: authentication/ntt-docomo-authentication.yml
+cross_reference:
+  authentication: authentication/ntt-docomo-authentication.yml
+  lifecycle: lifecycle/ntt-docomo-lifecycle.yml
+  conformance: conformance/ntt-docomo-conformance.yml
+  well_known: well-known/ntt-docomo-well-known.yml
+  domain_security: security/ntt-docomo-domain-security.yml

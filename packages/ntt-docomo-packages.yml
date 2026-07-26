@@ -1,0 +1,107 @@
+generated: '2026-07-25'
+method: searched
+source: >-
+  npm registry search API (registry.npmjs.org/-/v1/search?text=docomo), PyPI
+  JSON API (docomo, nttdocomo, docomo-api — all 404), GitHub org API for
+  docomo / nttdocomo / ntt-docomo / docomo-inc / NTTDOCOMO-Developers, and
+  DOCOMO's own developer and d ACCOUNT Connect pages. Searched 2026-07-25.
+description: >-
+  NTT DOCOMO, Inc. publishes no first-party client library on any public
+  package registry. The github.com/docomo organisation exists (id 9855700) but
+  holds zero public repositories; github.com/nttdocomo, github.com/ntt-docomo,
+  github.com/docomo-inc and github.com/NTTDOCOMO-Developers all return 404. The
+  only DOCOMO client code that ships publicly is community-written and targets
+  the retired "docomo Developer support" APIs — a marketplace that closed on
+  31 March 2021 and whose host no longer resolves, so every package below is
+  non-functional today. DOCOMO does ship "導入支援ライブラリ" (integration support
+  libraries) for d ACCOUNT Connect, but they download only after a partner
+  application and a DOCOMO review, so they are not catalogued in any registry
+  and cannot be recorded here. No `SDKs` pointer is emitted, because there is
+  no official SDK to point at.
+official: []
+official_count: 0
+gated_libraries:
+- name: d ACCOUNT Connect 導入支援ライブラリ (integration support libraries)
+  distribution: >-
+    Downloadable from the d ACCOUNT Connect application site only after the
+    company/applicant registration is approved by DOCOMO review.
+  registry: none
+  url: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html
+  languages: not disclosed publicly
+  official: true
+  publicly_installable: false
+third_party:
+- language: javascript
+  registry: npm
+  name: docomo-api
+  url: https://www.npmjs.com/package/docomo-api
+  repository: https://github.com/nanonanomachine/node-docomo-api
+  description: NodeJS wrapper for the docomo Developer support APIs.
+  official: false
+  targets: retired docomo Developer support platform (dev.smt.docomo.ne.jp, closed 2021-03-31)
+- language: javascript
+  registry: npm
+  name: docomo-tts-api
+  url: https://www.npmjs.com/package/docomo-tts-api
+  description: Client for the docomo text-to-speech Web API.
+  official: false
+  targets: retired docomo Developer support platform
+- language: javascript
+  registry: npm
+  name: docomo-tts-api-cli
+  url: https://www.npmjs.com/package/docomo-tts-api-cli
+  repository: https://github.com/cafedeaqua/docomo-tts-api-cli
+  description: CLI wrapper around the docomo text-to-speech Web API.
+  official: false
+  targets: retired docomo Developer support platform
+- language: javascript
+  registry: npm
+  name: docomochatter
+  url: https://www.npmjs.com/package/docomochatter
+  repository: https://github.com/toshimaru/docomochatter
+  description: Client for the docomo Zatsudan (雑談対話 / chat dialogue) API.
+  official: false
+  targets: retired docomo Developer support platform
+- language: javascript
+  registry: npm
+  name: hubot-docomochatter
+  url: https://www.npmjs.com/package/hubot-docomochatter
+  repository: https://github.com/toshimaru/hubot-docomochatter
+  description: Hubot adapter for the docomo chat-dialogue API.
+  official: false
+  targets: retired docomo Developer support platform
+- language: javascript
+  registry: npm
+  name: node-red-contrib-docomoapi
+  url: https://www.npmjs.com/package/node-red-contrib-docomoapi
+  repository: https://github.com/kotasuizu/node-red-contrib-docomoapi
+  description: Node-RED nodes for calling docomo APIs.
+  official: false
+  targets: retired docomo Developer support platform
+- language: javascript
+  registry: npm
+  name: passport-daccount
+  url: https://www.npmjs.com/package/passport-daccount
+  repository: https://github.com/auth0/passport-daccount
+  description: >-
+    Passport strategy for docomo d ACCOUNT authentication. Published under the
+    Auth0 org, not by DOCOMO. The closest thing to a public d ACCOUNT client,
+    and the only third-party package here whose target surface (d ACCOUNT
+    identity) still exists.
+  official: false
+registries_checked:
+- registry: npm
+  result: >-
+    20 results for "docomo"; none published by an NTT DOCOMO account. Matches
+    are community wrappers, Docomo Digital (a separate company) build configs,
+    and unrelated emoji datasets.
+- registry: pypi
+  result: 404 for docomo, nttdocomo and docomo-api.
+- registry: maven-central
+  result: No NTT DOCOMO, Inc. groupId found.
+- registry: nuget
+  result: No first-party package found.
+- registry: github
+  result: >-
+    github.com/docomo exists with 0 public repositories; nttdocomo,
+    ntt-docomo, docomo-inc and NTTDOCOMO-Developers all 404.

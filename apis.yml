@@ -71,8 +71,24 @@ apis:
     url: https://id.smt.docomo.ne.jp/src/index_business.html
   - type: APIReference
     url: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html
+  - type: GettingStarted
+    url: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html
   - type: OpenIDConnectDiscovery
     url: https://conf.uw.docomo.ne.jp/.well-known/openid-configuration
+  - type: Authentication
+    url: authentication/ntt-docomo-authentication.yml
+  - type: WellKnown
+    url: well-known/ntt-docomo-well-known.yml
+  - type: JWKS
+    url: well-known/ntt-docomo-jwks.json
+  - type: SignUp
+    url: https://g.daccount.docomo.ne.jp/VIEW_OC01/login4
+  - type: StatusPage
+    url: https://id.smt.docomo.ne.jp/src/dac/maintenance-g.html
+  - type: Support
+    url: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method_form.html
+  - type: TermsOfService
+    url: https://id.smt.docomo.ne.jp/src/utility/rules.html
 - aid: ntt-docomo:docomo-mail-imap-interface
   name: docomo Mail IMAP Interface
   description: >-
@@ -81,10 +97,19 @@ apis:
     documents how a mail client connects to the docomo Mail service over IMAP,
     and is distributed as a 96-page Japanese PDF specification
     (mail_imap_spec_260126.pdf, HTTP 200, application/pdf, 1,229,737 bytes,
-    revision dated 2026-01-26). This is an IMAP protocol interface, not an HTTP
-    API: there is no REST surface, no OpenAPI definition, no API key issuance and
-    no sandbox associated with it.
+    edition 4.5 dated 2026-01-26, first edition 2013-12-19). This is an IMAP
+    protocol interface, not an HTTP API: there is no REST surface, no OpenAPI
+    definition, no API key issuance and no sandbox associated with it. The
+    specification is complete and unredacted — it names the two production
+    endpoints (imap.spmode.ne.jp and imap2.spmode.ne.jp, both on port 993),
+    pins TLS 1.2 with an explicit allow-list of ten cipher suites and a
+    2048-bit public key, authenticates with d ACCOUNT ID and password, and
+    specifies 31 IMAP commands including IDLE, NAMESPACE, UID EXPUNGE and the
+    QUOTA family. The imap2 endpoint exists for the standard iPhone/iPad
+    mailer and deliberately differs in behaviour, rewriting multipart structure
+    for Deco-mail pictures and transcoding i-mode pictographs to Unicode emoji.
   humanURL: https://www.docomo.ne.jp/service/developer/smart_phone/application/imap/
+  baseURL: imaps://imap.spmode.ne.jp:993
   tags:
   - Email
   - IMAP
@@ -95,7 +120,29 @@ apis:
     url: https://www.docomo.ne.jp/service/developer/smart_phone/application/imap/
   - type: APIReference
     url: https://www.docomo.ne.jp/binary/pdf/service/developer/smart_phone/application/imap/mail_imap_spec_260126.pdf
+  - type: Conventions
+    url: conventions/ntt-docomo-conventions.yml
 common:
+- type: DomainSecurity
+  url: security/ntt-docomo-domain-security.yml
+- type: Authentication
+  url: authentication/ntt-docomo-authentication.yml
+- type: WellKnown
+  url: well-known/ntt-docomo-well-known.yml
+- type: OpenIDConnectDiscovery
+  url: well-known/ntt-docomo-openid-configuration.json
+- type: Conformance
+  url: conformance/ntt-docomo-conformance.yml
+- type: Conventions
+  url: conventions/ntt-docomo-conventions.yml
+- type: Lifecycle
+  url: lifecycle/ntt-docomo-lifecycle.yml
+- type: StatusPage
+  url: https://id.smt.docomo.ne.jp/src/dac/maintenance-g.html
+- type: Packages
+  url: packages/ntt-docomo-packages.yml
+- type: LLMsTxt
+  url: llms/ntt-docomo-llms.txt
 - type: Website
   url: https://www.docomo.ne.jp/
 - type: Website
@@ -104,6 +151,16 @@ common:
   url: https://www.docomo.ne.jp/service/developer/
 - type: TermsOfService
   url: https://www.docomo.ne.jp/service/developer/policy/index.html
+- type: PrivacyPolicy
+  url: https://www.docomo.ne.jp/utility/privacy/
+- type: Support
+  url: https://www.nttdocomo.co.jp/support/inquiry/
+- type: HelpCenter
+  url: https://www.docomo.ne.jp/support/
+- type: Pricing
+  url: https://www.docomo.ne.jp/charge/
+- type: SignUp
+  url: https://id.smt.docomo.ne.jp/cgi8/id/register
 - type: GitHubOrganization
   url: https://github.com/docomo
 - type: LinkedIn

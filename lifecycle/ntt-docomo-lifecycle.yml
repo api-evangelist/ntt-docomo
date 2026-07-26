@@ -1,0 +1,108 @@
+generated: '2026-07-25'
+method: searched
+source: >-
+  https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html;
+  https://id.smt.docomo.ne.jp/src/dac/maintenance-g.html;
+  https://www.docomo.ne.jp/info/network/;
+  https://www.docomo.ne.jp/service/developer/;
+  https://www.docomo.ne.jp/english/info/media_center/pr/2026/0130_00.html.
+  Probed 2026-07-25.
+description: >-
+  NTT DOCOMO, Inc. publishes no API versioning policy, no deprecation policy and
+  no SLA, because it publishes no self-serve API. What it does publish are
+  service-level lifecycle notices: a maintenance-window page for the d ACCOUNT
+  Connect application site, a network-outage notice page for the mobile network,
+  and dated end-of-service announcements for retired platforms. The lifecycle
+  record of DOCOMO's developer programme is one of contraction — an API
+  marketplace that opened in 2013 and closed in 2021, and an OpenID 2.0 login
+  that ended in 2020.
+versioning:
+  scheme: none-published
+  mechanism: null
+  current: null
+  docs: null
+  notes: >-
+    d ACCOUNT Connect exposes no version in its endpoint paths
+    (/cgi8/oidc/authorize, /token, /userinfo) and its discovery document carries
+    no version member. The JWKS path is the only versioned URL segment on the
+    surface (.../ofrnt/v1.0/jwksget). The gated integration manual is the only
+    place a version could be stated.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: >-
+    No RFC 8594 Sunset/Deprecation header contract and no deprecation policy
+    page is published. DOCOMO announces terminations as dated service-end
+    notices rather than through a standing policy, so no `Deprecation` pointer
+    is emitted.
+sla:
+  url: null
+  uptime_target: null
+  notes: >-
+    No published uptime target or availability commitment for d ACCOUNT Connect
+    or any other DOCOMO interface. Availability terms, if any, sit inside the
+    partner agreement signed after review.
+status_page: https://id.smt.docomo.ne.jp/src/dac/maintenance-g.html
+status_pages:
+  - url: https://id.smt.docomo.ne.jp/src/dac/maintenance-g.html
+    title: メンテナンス情報 | dアカウント・コネクト利用申請サイト
+    status: 200
+    scope: >-
+      Planned and ad-hoc maintenance windows for the d ACCOUNT Connect
+      application site — the closest thing DOCOMO publishes to an API status
+      page. Most recent posted window at fetch time: 2025-01-15 13:00–15:00 JST,
+      full site stop.
+    machine_readable: false
+  - url: https://www.docomo.ne.jp/info/network/
+    title: 重要なお知らせ（通信障害等） | お知らせ | NTTドコモ
+    status: 200
+    scope: >-
+      Mobile-network incident and outage notices for the carrier network as a
+      whole. Network-level, not API-level; regional sub-pages return 403 to
+      anonymous fetch.
+    machine_readable: false
+support_channels:
+  - url: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method_form.html
+    scope: d ACCOUNT Connect email enquiry form (partner-facing)
+  - url: https://www.nttdocomo.co.jp/support/inquiry/
+    scope: General customer support enquiry
+  - url: https://www.docomo.ne.jp/support/
+    scope: Customer support portal
+retired:
+  - name: docomo Developer support (dev.smt.docomo.ne.jp)
+    kind: API marketplace / developer portal
+    opened: '2013-10'
+    closed: '2021-03-31'
+    evidence: >-
+      Carried DOCOMO and partner APIs (speech recognition, speech synthesis,
+      chat dialogue, transit search, image recognition). The host no longer
+      resolves — DNS NXDOMAIN as of 2026-07-25 — so even archived documentation
+      is off the live web. Third-party SDK packages on npm still target it.
+    replacement: none
+  - name: docomo ログイン (OpenID Authentication 2.0)
+    kind: Identity / federated login
+    closed: '2020-09'
+    evidence: >-
+      Stated on https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html —
+      "OpenID 認証 2.0方式を利用した「docomo ログイン」は、2020年9月をもって終了させて
+      いただきました" — with users directed to d ACCOUNT Connect.
+    replacement: d ACCOUNT Connect (OpenID Connect)
+  - name: FOMA / i-mode
+    kind: Network and content platform
+    closed: announced end-of-service; pages being progressively removed
+    evidence: >-
+      www.docomo.ne.jp's own 404 page states that pages are being retired in
+      sequence because of the "FOMA" and "i-mode" service terminations. This is
+      the mechanism by which DOCOMO's older technical documentation is
+      disappearing.
+    replacement: none
+forward_looking:
+  - name: CAMARA Number Verification and SIM Swap via Aduna
+    status: announced, not callable
+    date: '2026-01-29'
+    evidence: >-
+      Partnership agreement with Aduna concluded 29 January 2026, announced
+      30 January 2026; collaboration since June 2025. No endpoint, spec,
+      sandbox or credential path published by DOCOMO, and DOCOMO was not listed
+      on Aduna's operator wall as of 2026-07-25.
+deprecated_operations: []

@@ -1,0 +1,145 @@
+generated: '2026-07-25'
+method: searched
+source: >-
+  Derived from the live d ACCOUNT Connect OIDC discovery document
+  (well-known/ntt-docomo-openid-configuration.json) and DOCOMO's own published
+  statements — https://id.smt.docomo.ne.jp/src/index_business.html,
+  https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html and the 30 January
+  2026 Aduna partnership press release. Probed 2026-07-25.
+description: >-
+  Which cross-cutting standards NTT DOCOMO, Inc. actually conforms to on its
+  public surface. The honest answer is narrow: one OpenID Connect Provider that
+  publishes a minimal discovery document, and one IMAP protocol specification.
+  Every network-API standard DOCOMO is associated with (CAMARA, GSMA Open
+  Gateway) is a stated commitment, not a callable implementation.
+standards:
+  - id: oidc-discovery
+    conforms: true
+    evidence: >-
+      OpenID Connect Discovery 1.0 document served anonymously at
+      https://conf.uw.docomo.ne.jp/.well-known/openid-configuration (HTTP 200,
+      application/json, 541 bytes). Contains issuer, authorization_endpoint,
+      token_endpoint, userinfo_endpoint, jwks_uri, response_types_supported,
+      subject_types_supported and id_token_signing_alg_values_supported —
+      the required members. All optional members are absent.
+  - id: oidc-core
+    conforms: true
+    evidence: >-
+      DOCOMO states on its own business page that d ACCOUNT Connect "は、OpenID
+      Connect規格に対応しております" (conforms to the OpenID Connect standard). The
+      authorization-code response type and pairwise subject identifiers are
+      declared in metadata. Full conformance cannot be independently verified
+      because the specification is gated behind application and review.
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      OpenID Connect is layered on OAuth 2.0; the discovery document declares an
+      authorization endpoint and a token endpoint with response_type=code.
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: false
+    evidence: >-
+      /.well-known/oauth-authorization-server returns 403 on
+      conf.uw.docomo.ne.jp (that host's default deny) and 404 elsewhere. Only
+      the OIDC-flavoured discovery document is published.
+  - id: rfc7636-pkce
+    conforms: unknown
+    evidence: >-
+      code_challenge_methods_supported is not present in the discovery
+      document. PKCE may be supported and simply undeclared; the gated manual
+      is the only place it could be confirmed. Recorded as unknown rather than
+      false.
+  - id: ciba
+    conforms: false
+    evidence: >-
+      No backchannel_authentication_endpoint and no CIBA grant type advertised.
+      This matters because CAMARA specifies OIDC + CIBA for network-based
+      authorization.
+  - id: fapi
+    conforms: false
+    evidence: >-
+      No Financial-grade API profile claim, no mTLS or private_key_jwt client
+      authentication declared, and HS256 is among the advertised ID token
+      signing algorithms — FAPI profiles forbid symmetric signing.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: No /.well-known/security.txt on any NTT DOCOMO, Inc. host.
+  - id: rfc9727-api-catalog
+    conforms: false
+    evidence: No /.well-known/api-catalog is published.
+  - id: openapi
+    conforms: false
+    evidence: >-
+      No OpenAPI or Swagger definition exists on any DOCOMO host.
+      /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs,
+      /docs and /redoc were probed against conf.uw.docomo.ne.jp,
+      id.smt.docomo.ne.jp, service.smt.docomo.ne.jp and www.docomo.ne.jp on
+      2026-07-25 — every one returned 403 or 404.
+  - id: asyncapi
+    conforms: false
+    evidence: No event, streaming or webhook surface is published, so no AsyncAPI exists.
+  - id: graphql
+    conforms: false
+    evidence: No /graphql endpoint responds on any probed host.
+  - id: grpc
+    conforms: false
+    evidence: No .proto definitions published; the github.com/docomo organisation has zero public repositories.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      No REST error surface is published at all, so no problem+json contract
+      exists to assess.
+  - id: camara
+    conforms: false
+    evidence: >-
+      DOCOMO's 30 January 2026 press release names Number Verification and SIM
+      Swap as the starting APIs of its Aduna partnership (agreement concluded
+      29 January 2026). No CAMARA OpenAPI, endpoint, sandbox or credential path
+      is published on any DOCOMO domain, and DOCOMO was not listed on Aduna's
+      operator wall as of 2026-07-25. A commitment, not an implementation.
+  - id: gsma-open-gateway
+    conforms: partial
+    evidence: >-
+      Membership is stated in DOCOMO's own release ("has participated in the
+      GSMA Open Gateway initiative"). The GSMA supporting-operators page
+      returned 403 to anonymous fetch, so the GSMA-side list could not be
+      independently confirmed. There is no DOCOMO-branded Open Gateway portal.
+  - id: tmforum-open-api
+    conforms: false
+    evidence: >-
+      No TM Forum Open API conformance certification confirmed for NTT DOCOMO,
+      Inc. tmforum.org returned 403 to anonymous fetch. A sibling entity, NTT
+      DOCOMO SOLUTIONS, Inc., is a different legal entity and is not claimed here.
+  - id: 3gpp-nef-scef
+    conforms: false
+    evidence: No public NEF or SCEF network-exposure surface was found.
+  - id: rfc3501-imap
+    conforms: true
+    evidence: >-
+      The docomo Mail IMAP Interface Specification (96-page Japanese PDF,
+      mail_imap_spec_260126.pdf, revised 2026-01-26, HTTP 200, application/pdf,
+      1,229,737 bytes) documents an IMAP client interface to docomo Mail. This
+      is the one machine-interface specification DOCOMO publishes without
+      registration.
+  - id: scim
+    conforms: false
+  - id: odata
+    conforms: false
+  - id: json-api
+    conforms: false
+  - id: fhir-r4
+    conforms: false
+compliance_program:
+  published_certifications: []
+  note: >-
+    No trust center and no named certifications (SOC 2, ISO 27001, PCI DSS,
+    FedRAMP, CSA STAR) are published for NTT DOCOMO, Inc. on docomo.ne.jp. The
+    company publishes an Information Security Policy
+    (https://www.docomo.ne.jp/utility/personal_data/security/) and a
+    sustainability section, neither of which names a certification. Because
+    there is no published compliance programme, no `Compliance` pointer is
+    emitted.
+  third_party_certification_requirement: >-
+    Note the inverse relationship: DOCOMO requires the RELYING PARTY to hold a
+    third-party certification (第三者認証の取得) before it will release user
+    attributes through d ACCOUNT Connect. DOCOMO imposes certification on its
+    integrators without publishing its own.

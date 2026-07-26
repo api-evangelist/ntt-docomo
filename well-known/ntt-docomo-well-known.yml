@@ -1,0 +1,94 @@
+generated: '2026-07-25'
+method: searched
+source: >-
+  Live probes of the /.well-known/ discovery surface on every host reachable from
+  apis.yml — the d ACCOUNT Connect OIDC configuration host (conf.uw.docomo.ne.jp),
+  the d ACCOUNT authorization host (id.smt.docomo.ne.jp), the corporate/developer
+  host (www.docomo.ne.jp) and the JWKS host advertised by the discovery document
+  (fr-end.oidc.if.cilite.docomo.ne.jp). Probed 2026-07-25.
+description: >-
+  NTT DOCOMO, Inc. publishes exactly one anonymous machine-readable discovery
+  document: the OpenID Connect configuration for d ACCOUNT Connect. It is served
+  from an AWS API Gateway / CloudFront edge (server openresty, x-amz-cf-id
+  present) with a Last-Modified of 2023-08-17, is 541 bytes, and is minimal —
+  it declares only the four endpoints, response_types, subject_types and
+  id_token signing algorithms. It carries no scopes_supported,
+  grant_types_supported, token_endpoint_auth_methods_supported,
+  claims_supported, registration_endpoint or backchannel_authentication_endpoint,
+  so the OIDC feature surface cannot be read from metadata alone; the full
+  specification is gated behind DOCOMO's application-and-review process. The
+  JWKS URI it points at is anonymously readable and returns a single RSA
+  signing key. Note that conf.uw.docomo.ne.jp answers 403 (not 404) to every
+  other path — 403 is that host's default deny, not evidence a document exists.
+hosts:
+  - host: https://conf.uw.docomo.ne.jp
+    role: d ACCOUNT Connect OpenID Provider (issuer)
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 200
+        type: application/json
+        bytes: 541
+        last_modified: 'Thu, 17 Aug 2023 03:03:16 GMT'
+        file: ntt-docomo-openid-configuration.json
+        note: OIDC Discovery 1.0 document, saved verbatim.
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+        note: RFC 8414 metadata not served; 403 is this host's default deny.
+      - path: /.well-known/oauth-protected-resource
+        status: 403
+      - path: /.well-known/security.txt
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /llms.txt
+        status: 403
+  - host: https://fr-end.oidc.if.cilite.docomo.ne.jp
+    role: JWKS host advertised by the d ACCOUNT Connect discovery document
+    documents:
+      - path: /oft/external/ofrnt/v1.0/jwksget
+        status: 200
+        type: application/json
+        file: ntt-docomo-jwks.json
+        note: >-
+          JSON Web Key Set — one RSA key, use "sig", no kid and no alg member.
+          Anonymously readable. Not a /.well-known/ path; DOCOMO publishes the
+          JWKS at a bespoke path referenced from jwks_uri.
+  - host: https://id.smt.docomo.ne.jp
+    role: d ACCOUNT authorization endpoint host and business documentation site
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /llms.txt
+        status: 404
+  - host: https://www.docomo.ne.jp
+    role: Corporate site and the surviving public developer information page
+    documents:
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /llms.txt
+        status: 404
+absent:
+  security_txt: >-
+    No RFC 9116 security.txt on any NTT DOCOMO, Inc. host. There is also no
+    vulnerability-disclosure or bug-bounty page: the only reporting channels
+    published are consumer anti-phishing and spam reporting
+    (https://www.docomo.ne.jp/info/anti-phishing/reporting/). No SecurityTxt
+    pointer is emitted.
+  api_catalog: No RFC 9727 /.well-known/api-catalog is published.
+  ai_plugin: No /.well-known/ai-plugin.json is published.
