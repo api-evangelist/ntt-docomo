@@ -1,0 +1,416 @@
+aid: ntt-docomo
+name: NTT Docomo
+review:
+  question: >-
+    Does NTT DOCOMO expose a real, self-serve public developer portal and
+    downloadable API definitions, and what is its CAMARA / GSMA Open Gateway
+    posture?
+  answer: false
+  date: '2026-07-25'
+  reviewer: API Evangelist
+  homeMarket: Japan
+  tier: mno-carrier
+  gated: true
+findings:
+  summary: |
+    NTT DOCOMO, Inc. — Japan's largest mobile network operator, roughly 90
+    million subscriptions, wholly owned by NTT — publishes no self-serve API
+    developer portal. Every conventional developer host on docomo.ne.jp is
+    absent: developer.docomo.ne.jp, developers.docomo.ne.jp, docs.docomo.ne.jp,
+    api.docomo.ne.jp and opengateway.docomo.ne.jp all fail DNS resolution
+    (NXDOMAIN), and /developer/, /developers/, /api/ and /opengateway/ on
+    www.docomo.ne.jp all return HTTP 404.
+
+    The legacy first-party programme is dead. "docomo Developer support"
+    (dev.smt.docomo.ne.jp), opened October 2013 as an API marketplace carrying
+    DOCOMO and partner APIs (speech recognition, speech synthesis, chat
+    dialogue, transit search, image recognition), was shut down on 31 March
+    2021. As of this review the host does not resolve at all — the DNS record
+    has been removed, so even the archived documentation is gone from the live
+    web. Third-party SDKs written against it (for example github.com/hikarin522/
+    docomo-api) now point at a dead host.
+
+    One public developer page survives: https://www.docomo.ne.jp/service/
+    developer/ (HTTP 200, "開発者向け情報"). It is open, requires no registration,
+    and is genuinely useful — but it is handset and content technical
+    information, not an API portal. It covers Machi-Chara, Deco-mail, emoji
+    packages, docomo Mail themes, NFC / Osaifu-Keitai, the docomo Mail
+    downloader, the docomo Mail IMAP interface, a device spec list, and sp-mode
+    server IP address ranges. There is no API key issuance, no sandbox, no REST
+    reference and no machine-readable definition anywhere on it.
+
+    Exactly one machine-interface specification is published openly: the docomo
+    Mail IMAP Interface Specification, a 96-page Japanese PDF
+    (mail_imap_spec_260126.pdf, HTTP 200, application/pdf, 1,229,737 bytes,
+    revision dated 2026-01-26). It is an IMAP protocol spec, not an HTTP API.
+
+    The one live, anonymously reachable machine surface is identity. d ACCOUNT
+    Connect (dアカウント・コネクト) is DOCOMO's OpenID Connect carrier-identity product
+    for businesses — roughly 90 million accounts, approximately 2,000
+    implemented sites. Its OIDC discovery document is served publicly at
+    https://conf.uw.docomo.ne.jp/.well-known/openid-configuration (HTTP 200) and
+    was fetched verbatim for this review. The integration manual and technical
+    specification, however, are downloadable only after submitting a use
+    application and passing DOCOMO's screening (審査). That is a partner gate.
+
+    CAMARA is a press release, not an implementation. DOCOMO states in its own
+    30 January 2026 release that it "has participated in the GSMA Open Gateway
+    initiative" and that it has collaborated with Aduna — the Ericsson-and-
+    carrier joint venture — since June 2025, concluding a formal partnership
+    agreement on 29 January 2026 to make its network APIs, "developed for the
+    international markets," available through Aduna's global platform. The
+    release names two starting APIs: Number Verification and SIM Swap
+    detection. Nothing is callable from DOCOMO directly; there is no CAMARA
+    sandbox, no CAMARA OpenAPI hosted on a DOCOMO domain, no DOCOMO-branded
+    Open Gateway portal, and no CAMARA client credentials path. Aduna's own
+    operator wall, checked on this date, does not yet list NTT DOCOMO among its
+    connected operators (it shows AT&T, Verizon, T-Mobile, Deutsche Telekom,
+    Orange, Telefónica, Vodafone, Airtel, Reliance Jio, Singtel, Telstra, KDDI
+    and Ericsson). So DOCOMO's network APIs are, as of this review, reachable
+    neither first-party nor through the aggregator it announced.
+
+    The same aggregator pattern repeats in payments. DOCOMO's carrier billing
+    (d払い / d Payment) has no public merchant API documentation; merchants
+    integrate through payment-gateway partners such as GMO Payment Gateway,
+    PAYGENT and SB Payment Service, whose developer sites carry the integration
+    specs rather than DOCOMO's.
+
+    Enterprise and wholesale API demand is redirected out of the company
+    entirely: https://www.docomo.ne.jp/biz/ issues a redirect to www.ntt.com,
+    the site of NTT DOCOMO BUSINESS, Inc. (the renamed NTT Communications, a
+    DOCOMO group company on a separate domain and separate legal entity). That
+    entity does run a real API gateway developer portal at developer.ntt.com
+    (HTTP 200) with a published /api-docs catalogue (Arcstar Universal One, UNO
+    API, Arcstar Universal One Mobile, circuit alarms, flexible Ethernet, gm2m,
+    OCN Mobile ONE Business, wholesale mobile access, Smart Data Platform, IAM,
+    OAuth, API log, business process, allowed-IP management) behind account
+    creation and login. It is profiled separately in the network as ntt-com and
+    is deliberately NOT counted as NTT DOCOMO, Inc.'s own developer surface.
+  developerPortal:
+    firstPartyApiPortal: null
+    surviving_public_developer_page:
+      url: https://www.docomo.ne.jp/service/developer/
+      httpStatus: 200
+      selfServe: true
+      realApiPortal: false
+      note: >-
+        Open, no registration, but it is handset/content technical information
+        (Machi-Chara, Deco-mail, emoji, NFC/Osaifu-Keitai, docomo Mail
+        downloader and IMAP, device spec list, sp-mode server IP ranges). No API
+        keys, no sandbox, no REST reference, no machine-readable definition.
+    probes:
+    - url: https://www.docomo.ne.jp/
+      httpStatus: 200
+    - url: https://developer.docomo.ne.jp
+      httpStatus: 0
+      result: DNS NXDOMAIN — host does not resolve
+    - url: https://developers.docomo.ne.jp
+      httpStatus: 0
+      result: DNS NXDOMAIN — host does not resolve
+    - url: https://docs.docomo.ne.jp
+      httpStatus: 0
+      result: DNS NXDOMAIN — host does not resolve
+    - url: https://api.docomo.ne.jp
+      httpStatus: 0
+      result: DNS NXDOMAIN — host does not resolve
+    - url: https://opengateway.docomo.ne.jp
+      httpStatus: 0
+      result: DNS NXDOMAIN — host does not resolve
+    - url: https://dev.smt.docomo.ne.jp/
+      httpStatus: 0
+      result: >-
+        DNS NXDOMAIN — the retired "docomo Developer support" portal. Launched
+        October 2013, service ended 31 March 2021, DNS record now removed.
+    - url: https://www.docomo.ne.jp/developer/
+      httpStatus: 404
+    - url: https://www.docomo.ne.jp/developers/
+      httpStatus: 404
+    - url: https://www.docomo.ne.jp/api/
+      httpStatus: 404
+    - url: https://www.docomo.ne.jp/opengateway/
+      httpStatus: 404
+    - url: https://www.docomo.ne.jp/business/
+      httpStatus: 404
+    - url: https://docomo.ne.jp/openapi.json
+      httpStatus: 404
+    - url: https://www.docomo.ne.jp/biz/
+      httpStatus: 200
+      result: >-
+        Redirects to https://www.ntt.com/ — NTT DOCOMO BUSINESS, Inc., a
+        separate legal entity and domain, profiled separately as ntt-com.
+    - url: https://www.docomo.ne.jp/service/developer/
+      httpStatus: 200
+    - url: https://id.smt.docomo.ne.jp/src/index_business.html
+      httpStatus: 200
+    - url: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html
+      httpStatus: 200
+    - url: https://conf.uw.docomo.ne.jp/.well-known/openid-configuration
+      httpStatus: 200
+    - url: https://conf.uw.docomo.ne.jp/.well-known/oauth-authorization-server
+      httpStatus: 403
+    - url: https://id.smt.docomo.ne.jp/.well-known/openid-configuration
+      httpStatus: 404
+    - url: https://www.docomo.ne.jp/.well-known/openid-configuration
+      httpStatus: 404
+  openapi:
+    harvested: false
+    specsCount: 0
+    note: >-
+      No OpenAPI, Swagger, RAML or AsyncAPI definition is published on any NTT
+      DOCOMO, Inc. host. /openapi.json returned 404; no "Download OpenAPI" link
+      exists on any DOCOMO page reviewed. The openapi/ directory is therefore
+      omitted from this repository.
+  camara:
+    posture: >-
+      Press release only — GSMA Open Gateway participant, Aduna aggregation
+      partner, nothing callable first-party
+    apisNamedWithEvidence:
+    - Number Verification
+    - SIM Swap
+    firstPartyCamaraEndpoint: false
+    camaraSandbox: false
+    camaraOpenApiHostedByDocomo: false
+    evidence:
+    - source: https://www.docomo.ne.jp/english/info/media_center/pr/2026/0130_00.html
+      date: '2026-01-30'
+      note: >-
+        First-party DOCOMO press release. States the partnership agreement with
+        Aduna was concluded 29 January 2026; that DOCOMO has collaborated with
+        Aduna since June 2025 on an aggregation model; that DOCOMO "has
+        participated in the GSMA Open Gateway initiative"; and that the
+        collaboration begins with fraud-prevention use cases enabled by Number
+        Verification and SIM Swap detection APIs. The release enumerates no
+        other CAMARA API, publishes no endpoint, and links to no developer
+        portal.
+    - source: https://www.adunaglobal.com/
+      date: '2026-07-25'
+      note: >-
+        Aduna's operator wall lists AT&T, Verizon, T-Mobile, Deutsche Telekom,
+        Orange, Telefónica, Vodafone, Airtel, Reliance Jio, Singtel, Telstra,
+        KDDI and Ericsson. NTT DOCOMO is not shown. Aduna groups its catalogue
+        as Security, Identity, Location, Device Information, Data Connectivity
+        and Network Insights.
+    plainStatement: >-
+      A press release is not an implementation. DOCOMO has committed to CAMARA
+      Number Verification and SIM Swap and has signed the channel to deliver
+      them, but as of 2026-07-25 there is no CAMARA endpoint, specification,
+      sandbox or credential path published by DOCOMO, and DOCOMO is not yet
+      listed on the aggregator it announced. A developer cannot call a DOCOMO
+      network API today by any documented public route.
+  openGateway:
+    member: true
+    evidence: >-
+      Stated in NTT DOCOMO's own press release of 30 January 2026: DOCOMO "has
+      participated in the GSMA Open Gateway initiative." The GSMA supporting-
+      operators page returned HTTP 403 to anonymous fetch, so the GSMA-side list
+      could not be independently confirmed in this pass.
+    docomoBrandedOpenGatewayPortal: false
+  tmforum:
+    conformanceCertificationConfirmed: false
+    note: >-
+      No TM Forum Open API conformance certification was confirmed for NTT
+      DOCOMO, Inc. tmforum.org returned HTTP 403 to anonymous fetch, so the
+      certifications-awarded register could not be read directly. Secondary
+      sources suggest a sibling group company, NTT DOCOMO SOLUTIONS, Inc.
+      (formerly NTT Comware), appears on the TM Forum certification leaderboard;
+      that is a different legal entity and was NOT verified in this pass and is
+      not claimed here.
+  threeGpp:
+    nefOrScefSurface: false
+    networkSlicingApi: false
+    edgeMecApi: false
+    note: >-
+      No public NEF (Network Exposure Function) or SCEF surface, 5G
+      network-slicing API, or edge/MEC API was found on any NTT DOCOMO domain.
+  auth:
+    schemes:
+    - OpenID Connect authorization code (d ACCOUNT Connect)
+    ciba: false
+    cibaNote: >-
+      The d ACCOUNT Connect OIDC discovery document advertises no
+      backchannel_authentication_endpoint and no CIBA grant type. CAMARA
+      specifies OIDC plus CIBA for network-based authorization; CIBA does not
+      appear anywhere in DOCOMO's published metadata.
+    openidConfiguration:
+      url: https://conf.uw.docomo.ne.jp/.well-known/openid-configuration
+      httpStatus: 200
+      fetched: '2026-07-25'
+      issuer: https://conf.uw.docomo.ne.jp/
+      authorization_endpoint: https://id.smt.docomo.ne.jp/cgi8/oidc/authorize
+      token_endpoint: https://conf.uw.docomo.ne.jp/token
+      userinfo_endpoint: https://conf.uw.docomo.ne.jp/userinfo
+      jwks_uri: https://fr-end.oidc.if.cilite.docomo.ne.jp/oft/external/ofrnt/v1.0/jwksget
+      response_types_supported:
+      - code
+      subject_types_supported:
+      - pairwise
+      id_token_signing_alg_values_supported:
+      - HS256
+      - RS256
+    oauthAuthorizationServerMetadata:
+      url: https://conf.uw.docomo.ne.jp/.well-known/oauth-authorization-server
+      httpStatus: 403
+      note: Served but forbidden to anonymous clients.
+    onboarding: >-
+      d ACCOUNT Connect login-only integration is applied for online; anything
+      that reads user attributes requires DOCOMO screening (審査). The technical
+      manual and support libraries download only after approval. No self-serve
+      key issuance exists anywhere on docomo.ne.jp.
+  webhooks:
+    published: false
+    asyncapi: false
+    note: >-
+      No webhook or event catalogue is published. No AsyncAPI document exists.
+      This matches the carrier pattern — the event surfaces in this sector
+      belong to the CPaaS aggregators, not the operators.
+  graphql:
+    published: false
+  grpc:
+    published: false
+  postman:
+    publicWorkspace: false
+  sdks:
+    firstParty: []
+    note: >-
+      No first-party SDK packages were found on npm, PyPI, Maven Central or
+      NuGet. The github.com/docomo organisation exists (id 9855700) but contains
+      zero public repositories; github.com/nttdocomo and github.com/ntt-docomo
+      return 404. d ACCOUNT Connect "support libraries" exist but download only
+      after application approval.
+  channelToDevelopers:
+    direct: false
+    viaAggregator: true
+    aggregators:
+    - name: Aduna
+      role: >-
+        Announced global aggregator for DOCOMO's international network APIs
+        (Number Verification, SIM Swap). Partnership concluded 29 January 2026;
+        DOCOMO not yet listed on Aduna's operator wall as of 2026-07-25.
+    - name: GMO Payment Gateway / PAYGENT / SB Payment Service
+      role: >-
+        Carrier-billing (d払い) integration partners. DOCOMO publishes no
+        merchant API docs; the payment gateways carry the integration specs.
+    - name: NTT DOCOMO BUSINESS, Inc.
+      role: >-
+        Sibling group entity on ntt.com that runs the group's actual enterprise
+        API gateway portal (developer.ntt.com, login-gated). docomo.ne.jp/biz
+        redirects there. Profiled separately as ntt-com.
+    plainStatement: >-
+      NTT DOCOMO reaches developers only through intermediaries. Its own
+      developer programme is closed, its network APIs are routed to an
+      aggregator that has not yet listed it, its billing rails are sold through
+      payment gateways, and its enterprise API portal belongs to a different
+      subsidiary on a different domain. This is the central pattern of the
+      telecom sector expressed almost purely.
+  transports:
+  - protocol: HTTPS
+    scheme: https
+    documented: true
+    note: >-
+      OpenID Connect authorization-code flow for d ACCOUNT Connect. Discovery
+      document publicly readable; full specification gated behind application.
+  - protocol: IMAP
+    scheme: imaps
+    documented: true
+    note: >-
+      docomo Mail IMAP interface, specified in a 96-page public PDF revised
+      2026-01-26.
+  - protocol: REST
+    documented: false
+    note: No public REST API is documented by NTT DOCOMO, Inc.
+  - protocol: GraphQL
+    documented: false
+  - protocol: gRPC
+    documented: false
+  - protocol: WebSocket
+    scheme: wss
+    documented: false
+sources:
+- url: https://www.docomo.ne.jp/
+  type: Website
+  httpStatus: 200
+  note: Corporate and consumer home. www.nttdocomo.co.jp redirects here.
+- url: https://www.docomo.ne.jp/service/developer/
+  type: Documentation
+  httpStatus: 200
+  note: >-
+    "開発者向け情報" — the only surviving public developer page. Handset/content
+    technical information; no API keys, no REST, no OpenAPI.
+- url: https://www.docomo.ne.jp/service/developer/smart_phone/application/imap/
+  type: Documentation
+  httpStatus: 200
+  note: docomo Mail IMAP interface landing page.
+- url: https://www.docomo.ne.jp/binary/pdf/service/developer/smart_phone/application/imap/mail_imap_spec_260126.pdf
+  type: APIReference
+  httpStatus: 200
+  contentType: application/pdf
+  bytes: 1229737
+  pages: 96
+  note: >-
+    docomo Mail IMAP Interface Specification, revision dated 2026-01-26. Fetched
+    and verified as a real PDF on 2026-07-25. Not stored in this repository — it
+    is a protocol document, not a machine-readable API definition.
+- url: https://id.smt.docomo.ne.jp/src/index_business.html
+  type: Documentation
+  httpStatus: 200
+  note: >-
+    d ACCOUNT Connect business overview — ~90 million accounts, ~2,000
+    implemented sites, OpenID Connect compliant, biometric and line
+    authentication. OpenID 2.0 support was discontinued March 2021.
+- url: https://id.smt.docomo.ne.jp/src/dlogin/ctop_method.html
+  type: APIReference
+  httpStatus: 200
+  note: >-
+    Implementation method page. States the manual downloads only after a use
+    application; attribute access requires DOCOMO review.
+- url: https://conf.uw.docomo.ne.jp/.well-known/openid-configuration
+  type: Authentication
+  httpStatus: 200
+  note: >-
+    Live anonymous OIDC discovery document, fetched verbatim 2026-07-25. No CIBA
+    backchannel endpoint advertised.
+- url: https://www.docomo.ne.jp/english/info/media_center/pr/2026/0130_00.html
+  type: PressRelease
+  httpStatus: 200
+  note: >-
+    DOCOMO–Aduna partnership, 30 January 2026. Names Number Verification and SIM
+    Swap; confirms GSMA Open Gateway participation and June 2025 collaboration
+    start. No developer portal URL and no endpoints given.
+- url: https://www.adunaglobal.com/
+  type: Website
+  httpStatus: 200
+  note: >-
+    Aduna aggregator. Operator wall does not list NTT DOCOMO as of 2026-07-25.
+- url: https://service.smt.docomo.ne.jp/keitai_payment/corporation/
+  type: Documentation
+  httpStatus: 200
+  note: >-
+    d払い merchant onboarding. No API documentation; merchants integrate via
+    payment-gateway partners (GMO Payment Gateway, PAYGENT).
+- url: https://developer.ntt.com/
+  type: Documentation
+  httpStatus: 200
+  note: >-
+    NTT DOCOMO BUSINESS, Inc. developer portal (separate entity/domain, reached
+    by redirect from docomo.ne.jp/biz). Real /api-docs catalogue behind account
+    creation and login. Recorded as context only; profiled as ntt-com.
+- url: https://www.gsma.com/solutions-and-impact/gsma-open-gateway/which-mobile-operators-are-supporting-open-gateway/
+  type: Reference
+  httpStatus: 403
+  note: GSMA operator list not readable anonymously; membership taken from DOCOMO's own release.
+- url: https://www.tmforum.org/certifications-awarded/
+  type: Reference
+  httpStatus: 403
+  note: TM Forum certification register not readable anonymously; no claim made.
+actions:
+  openapiHarvested: 0
+  openapiDirectoryCreated: false
+  apisListed: 2
+  status: built-stub
+  reason: >-
+    NTT DOCOMO, Inc. publishes no self-serve API developer portal and no
+    machine-readable API definitions. Two real, documented interfaces were
+    captured — the OIDC-based d ACCOUNT Connect carrier identity service (public
+    discovery document, gated manual) and the docomo Mail IMAP interface
+    specification. Everything else is partner-gated, aggregator-mediated, or a
+    press-release commitment.
