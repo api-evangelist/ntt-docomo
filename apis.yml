@@ -39,6 +39,9 @@ accessModel:
   trial: false
   try_now: false
   public: false
+  gated: partner
+  gated_source:
+  - tag:Partner Gated
   label: Unknown
   confidence: low
   source:
@@ -60,7 +63,6 @@ tags:
 - Number Verification
 - Carrier Billing
 - 5G
-- Partner Gated
 created: '2026-07-25'
 modified: '2026-07-25'
 specificationVersion: '0.23'
@@ -196,3 +198,5 @@ common:
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-tags-removed:
+- Partner Gated
