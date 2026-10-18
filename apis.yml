@@ -91,6 +91,11 @@ apis:
   - OpenID Connect
   - Authentication
   - Carrier Identity
+  tags_raw:
+  - Identity
+  - OpenID Connect
+  - Authentication
+  - Carrier Identity
   - Partner Gated
   properties:
   - type: Documentation
